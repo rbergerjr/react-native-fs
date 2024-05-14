@@ -17,6 +17,7 @@ var base64 = require('base-64');
 var utf8 = require('utf8');
 var isIOS = require('react-native').Platform.OS === 'ios';
 var isWindows = require('react-native').Platform.OS === 'windows'; // To accommodate Windows
+var isMacOS = require('react-native').Platform.OS === 'macos'; // To accommodate MacOS
 
 var RNFSFileTypeRegular = RNFSManager.RNFSFileTypeRegular;
 var RNFSFileTypeDirectory = RNFSManager.RNFSFileTypeDirectory;
@@ -206,9 +207,9 @@ var RNFS = {
     return RNFSManager.copyFile(normalizeFilePath(filepath), normalizeFilePath(destPath), options).then(() => void 0);
   },
 
-  // Windows workaround for slow copying of large folders of files
+  // Windows workaround for slow copying of large folders of files. Supported on MacOS for convenience.
   copyFolder(filepath: string, destPath: string): Promise<void> {
-    if(isWindows) {
+    if(isWindows || isMacOS) {
       return RNFSManager.copyFolder(normalizeFilePath(filepath), normalizeFilePath(destPath));
     }
   },
